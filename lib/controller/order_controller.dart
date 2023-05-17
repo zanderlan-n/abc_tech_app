@@ -6,7 +6,7 @@ import 'dart:developer';
 
 class OrderController extends GetxController {
   final GeolocationServiceInterface _geolocationService;
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   final operatorIdController = TextEditingController();
   final selectedAssists = <Assist>[].obs;
 

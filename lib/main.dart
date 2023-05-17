@@ -29,11 +29,17 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        highlightColor: Colors.white,
         textTheme: const TextTheme(
-          headlineMedium: TextStyle(
-            fontSize: 48,
+          headlineLarge: TextStyle(
+            fontSize: 18,
             fontWeight: FontWeight.w300,
-            color: Colors.red,
+            color: Colors.blueGrey,
+          ),
+          headlineMedium: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w300,
+            color: Colors.blueGrey,
           ),
         ),
       ),
