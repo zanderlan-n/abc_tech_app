@@ -5,6 +5,9 @@ import 'package:get/get.dart';
 class AssistanceController extends GetxController
     with StateMixin<List<Assist>> {
   late AssistanceService _assistanceService;
+  List<Assist> allAssists = [];
+  List<Assist> selectedAssists = [];
+
   @override
   void onInit() {
     super.onInit();
@@ -12,9 +15,32 @@ class AssistanceController extends GetxController
     getAssistanceList();
   }
 
+  void selectAssist(int index) {
+    Assist assist = allAssists[index];
+    int indexFound =
+        selectedAssists.indexWhere((element) => element.id == assist.id);
+
+    if (indexFound == -1) {
+      selectedAssists.add(assist);
+    } else {
+      selectedAssists.removeAt(indexFound);
+    }
+
+    change(allAssists, status: RxStatus.success());
+  }
+
+  bool isSelected(int index) {
+    Assist assist = allAssists[index];
+    int indexFound =
+        selectedAssists.indexWhere((element) => element.id == assist.id);
+
+    return indexFound != -1;
+  }
+
   void getAssistanceList() {
     change(null, status: RxStatus.loading());
     _assistanceService.getAssists().then((value) {
+      allAssists.addAll(value);
       change(value, status: RxStatus.success());
     }, onError: (error) {
       change([], status: RxStatus.error(error.toString()));

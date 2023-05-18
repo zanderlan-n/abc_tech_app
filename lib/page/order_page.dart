@@ -1,10 +1,21 @@
 import 'package:abc_tech_app/controller/order_controller.dart';
+import 'package:abc_tech_app/model/assist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class OrderPage extends GetView<OrderController> {
   const OrderPage({super.key});
+
+  Widget renderAssists(List<Assist> assistsList) {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: assistsList.length,
+      itemBuilder: (context, index) => ListTile(
+        title: Text(assistsList[index].title),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,18 +56,28 @@ class OrderPage extends GetView<OrderController> {
                             "Selecione os serviços prestados:",
                             style: context.theme.textTheme.headlineMedium,
                           ))),
+                  Ink(
+                    width: 40,
+                    height: 40,
+                    decoration: ShapeDecoration(
+                        shape: const CircleBorder(),
+                        color: context.theme.primaryColor),
+                    child: IconButton(
+                        icon: const Icon(Icons.search),
+                        color: Colors.white,
+                        onPressed: () => controller.editAssist()),
+                  ),
                 ],
               ),
-              Ink(
-                decoration: ShapeDecoration(
-                    shape: const CircleBorder(),
-                    color: context.theme.primaryColor),
-                child: IconButton(
-                    icon: const Icon(Icons.search),
-                    color: context.theme.highlightColor,
-                    onPressed: () => controller.getLocation()),
-              ),
-              // Obx(() => ListView.builder(,
+              Obx(() => renderAssists(controller.selectedAssists)),
+              Row(
+                children: [
+                  Expanded(
+                      child: ElevatedButton(
+                          onPressed: controller.finishStartOrder,
+                          child: const Text("Iniciar Ordem de Serviço")))
+                ],
+              )
             ]),
           ),
         ),

@@ -23,4 +23,10 @@ class OrderController extends GetxController {
         .getPosition()
         .then((value) => log(value.toJson().toString()));
   }
+
+  editAssist() {
+    Get.toNamed('/services');
+  }
+
+  finishStartOrder() {}
 }

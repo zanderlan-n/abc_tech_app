@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        highlightColor: Colors.white,
+        highlightColor: Colors.red,
         textTheme: const TextTheme(
           headlineLarge: TextStyle(
             fontSize: 18,
@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
           binding: OrderBinding(),
         ),
         GetPage(
-          name: '/home',
+          name: '/services',
           page: () => const AssistanceListPage(),
           binding: AssistanceBind(),
         ),
