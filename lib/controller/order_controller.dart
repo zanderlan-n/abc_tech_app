@@ -25,7 +25,7 @@ class OrderController extends GetxController {
   }
 
   editAssist() {
-    Get.toNamed('/services');
+    Get.toNamed('/services', arguments: selectedAssists);
   }
 
   finishStartOrder() {}

@@ -13,6 +13,13 @@ class AssistanceController extends GetxController
     super.onInit();
     _assistanceService = Get.find<AssistanceService>();
     getAssistanceList();
+    selectedAssists = Get.arguments;
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    selectedAssists = Get.arguments;
   }
 
   void selectAssist(int index) {
