@@ -17,8 +17,7 @@ class OrderPage extends GetView<OrderController> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget renderScrenn(BuildContext context) {
     // controller.getLocation();
     return Scaffold(
       appBar: AppBar(
@@ -74,8 +73,15 @@ class OrderPage extends GetView<OrderController> {
                 children: [
                   Expanded(
                       child: ElevatedButton(
-                          onPressed: controller.finishStartOrder,
-                          child: const Text("Iniciar Ordem de Serviço")))
+                    onPressed: controller.finishStartOrder,
+                    child: Obx(() {
+                      if (controller.screenState.value == OrderState.creating) {
+                        return const Text("Iniciar Ordem de Serviço");
+                      } else {
+                        return const Text("Finalizar Ordem de Serviço");
+                      }
+                    }),
+                  ))
                 ],
               )
             ]),
@@ -83,5 +89,19 @@ class OrderPage extends GetView<OrderController> {
         ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // controller.getLocation();
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text("Ordem de Serviço"),
+        ),
+        body: Container(
+            constraints: const BoxConstraints.expand(),
+            padding: const EdgeInsets.all(10),
+            child: controller.obx((state) => renderScrenn(context),
+                onLoading: const Center(child: CircularProgressIndicator()))));
   }
 }
