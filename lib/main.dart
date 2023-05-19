@@ -3,6 +3,8 @@ import 'package:abc_tech_app/page/assistance_bind.dart';
 import 'package:abc_tech_app/page/assistances_page.dart';
 import 'package:abc_tech_app/page/login_bind.dart';
 import 'package:abc_tech_app/page/login_page.dart';
+import 'package:abc_tech_app/page/order_bind.dart';
+import 'package:abc_tech_app/page/order_page.dart';
 import 'package:abc_tech_app/provider/assist_provider.dart';
 import 'package:abc_tech_app/service/assist_service.dart';
 import 'package:flutter/material.dart';
@@ -27,22 +29,33 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        highlightColor: Colors.red,
         textTheme: const TextTheme(
-          headlineMedium: TextStyle(
-            fontSize: 48,
+          headlineLarge: TextStyle(
+            fontSize: 18,
             fontWeight: FontWeight.w300,
-            color: Colors.red,
+            color: Colors.blueGrey,
+          ),
+          headlineMedium: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w300,
+            color: Colors.blueGrey,
           ),
         ),
       ),
       getPages: [
+        // GetPage(
+        //   name: '/',
+        //   page: () => const LoginPage(),
+        //   binding: LoginBind(),
+        // ),
         GetPage(
           name: '/',
-          page: () => const LoginPage(),
-          binding: LoginBind(),
+          page: () => const OrderPage(),
+          binding: OrderBinding(),
         ),
         GetPage(
-          name: '/home',
+          name: '/services',
           page: () => const AssistanceListPage(),
           binding: AssistanceBind(),
         ),
