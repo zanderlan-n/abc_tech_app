@@ -1,8 +1,6 @@
 import 'package:abc_tech_app/controller/assistance_controller.dart';
 import 'package:abc_tech_app/page/assistance_bind.dart';
 import 'package:abc_tech_app/page/assistances_page.dart';
-import 'package:abc_tech_app/page/login_bind.dart';
-import 'package:abc_tech_app/page/login_page.dart';
 import 'package:abc_tech_app/page/order_bind.dart';
 import 'package:abc_tech_app/page/order_page.dart';
 import 'package:abc_tech_app/provider/assist_provider.dart';
