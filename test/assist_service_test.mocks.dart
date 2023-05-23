@@ -30,12 +30,12 @@ class _FakeResponse_0<T> extends _i1.SmartFake implements _i2.Response<T> {
         );
 }
 
-/// A class which mocks [AssistanceProviderInterface].
+/// A class which mocks [AssistProviderInterface].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAssistanceProviderInterface extends _i1.Mock
-    implements _i3.AssistanceProviderInterface {
-  MockAssistanceProviderInterface() {
+class MockAssistProviderInterface extends _i1.Mock
+    implements _i3.AssistProviderInterface {
+  MockAssistProviderInterface() {
     _i1.throwOnMissingStub(this);
   }
 

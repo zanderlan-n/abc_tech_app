@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:abc_tech_app/model/assist.dart';
 import 'package:abc_tech_app/provider/assist_provider.dart';
-import 'package:abc_tech_app/service/assist_service.dart';
+import 'package:abc_tech_app/services/assist_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get_connect.dart';
 import 'package:mockito/annotations.dart';
@@ -11,14 +11,15 @@ import 'package:mockito/mockito.dart';
 
 import 'assist_service_test.mocks.dart';
 
-@GenerateMocks([AssistanceProviderInterface])
+@GenerateMocks([AssistProviderInterface])
 void main() {
-  late AssistanceProviderInterface assistanceProviderInterface;
-  late AssistanceService assistanceService;
+  late AssistProviderInterface assistanceProviderInterface;
+  late AssistService assistanceService;
 
   setUp(() async {
-    assistanceProviderInterface = MockAssistanceProviderInterface();
-    assistanceService = AssistanceService().init(assistanceProviderInterface);
+    assistanceProviderInterface = MockAssistProviderInterface();
+    assistanceService =
+        AssistService(assistProvider: assistanceProviderInterface);
     var json = File("${Directory.current.path}/test/resources/assists.json")
         .readAsStringSync();
 

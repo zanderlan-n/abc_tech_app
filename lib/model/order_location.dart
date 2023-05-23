@@ -3,22 +3,22 @@ import 'dart:convert';
 class OrderLocation {
   double latitude;
   double longitude;
-  DateTime dateTime;
-
-  OrderLocation(
-      {required this.latitude,
-      required this.longitude,
-      required this.dateTime});
+  DateTime date;
+  OrderLocation({
+    required this.latitude,
+    required this.longitude,
+    required this.date,
+  });
 
   OrderLocation copyWith({
     double? latitude,
     double? longitude,
-    DateTime? dateTime,
+    DateTime? date,
   }) {
     return OrderLocation(
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
-      dateTime: dateTime ?? this.dateTime,
+      date: date ?? this.date,
     );
   }
 
@@ -26,7 +26,7 @@ class OrderLocation {
     return <String, dynamic>{
       'latitude': latitude,
       'longitude': longitude,
-      'dateTime': dateTime.toIso8601String(),
+      'date': date.millisecondsSinceEpoch,
     };
   }
 
@@ -34,7 +34,7 @@ class OrderLocation {
     return OrderLocation(
       latitude: map['latitude'] as double,
       longitude: map['longitude'] as double,
-      dateTime: DateTime.fromMillisecondsSinceEpoch(map['dateTime'] as int),
+      date: DateTime.fromMillisecondsSinceEpoch(map['date'] as int),
     );
   }
 
@@ -45,7 +45,7 @@ class OrderLocation {
 
   @override
   String toString() =>
-      'OrderLocation(latitude: $latitude, longitude: $longitude, dateTime: $dateTime)';
+      'OrderLocation(latitude: $latitude, longitude: $longitude, date: $date)';
 
   @override
   bool operator ==(covariant OrderLocation other) {
@@ -53,10 +53,9 @@ class OrderLocation {
 
     return other.latitude == latitude &&
         other.longitude == longitude &&
-        other.dateTime == dateTime;
+        other.date == date;
   }
 
   @override
-  int get hashCode =>
-      latitude.hashCode ^ longitude.hashCode ^ dateTime.hashCode;
+  int get hashCode => latitude.hashCode ^ longitude.hashCode ^ date.hashCode;
 }

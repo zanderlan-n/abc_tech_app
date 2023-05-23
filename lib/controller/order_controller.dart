@@ -1,23 +1,23 @@
 import 'package:abc_tech_app/model/assist.dart';
+import 'package:abc_tech_app/model/order.dart';
+import 'package:abc_tech_app/model/order_created.dart';
 import 'package:abc_tech_app/model/order_location.dart';
-import 'package:abc_tech_app/service/geolocation_service.dart';
-import 'package:abc_tech_app/service/order_service.dart';
+import 'package:abc_tech_app/services/geolocation_service.dart';
+import 'package:abc_tech_app/services/order_service.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'dart:developer';
 
-import '../model/order.dart';
+enum OrderState { creating, started, finished, loading }
 
-enum OrderState { creating, started, finished }
-
-class OrderController extends GetxController with StateMixin<bool> {
+class OrderController extends GetxController with StateMixin<OrderCreated> {
   final GeolocationServiceInterface _geolocationService;
-  final OrderServiceInterface _orderService;
+  final OrderService _orderService;
   final formKey = GlobalKey<FormState>();
   final operatorIdController = TextEditingController();
   final selectedAssists = <Assist>[].obs;
-  late Order? _order;
   final screenState = OrderState.creating.obs;
+  late Order _order;
 
   OrderController(this._geolocationService, this._orderService);
 
@@ -25,88 +25,73 @@ class OrderController extends GetxController with StateMixin<bool> {
   void onInit() {
     super.onInit();
     _geolocationService.start();
+    change(null, status: RxStatus.success());
   }
 
-  @override
-  void onReady() {
-    change(true, status: RxStatus.success());
+  OrderLocation orderLocationFromPosition(Position position) {
+    return OrderLocation(
+        latitude: position.latitude,
+        longitude: position.longitude,
+        date: DateTime.now());
   }
 
-  getLocation() {
-    _geolocationService
-        .getPosition()
-        .then((value) => log(value.toJson().toString()));
-  }
-
-  editAssist() {
-    Get.toNamed('/services', arguments: selectedAssists);
+  List<int> servicesIdArrayFromServices() {
+    return selectedAssists.map((element) => element.id).toList();
   }
 
   finishStartOrder() {
     switch (screenState.value) {
       case OrderState.creating:
-        change(true, status: RxStatus.loading());
+        screenState.value = OrderState.loading;
         _geolocationService.getPosition().then((value) {
-          var start = OrderLocation(
-            latitude: value.latitude,
-            longitude: value.longitude,
-            dateTime: DateTime.now(),
-          );
-
-          List<int> assists =
-              selectedAssists.map((element) => element.id).toList();
+          var start = orderLocationFromPosition(value);
 
           _order = Order(
-            operatorId: int.parse(operatorIdController.text),
-            services: assists,
-          );
-          _order!.start = start;
+              operatorId: int.parse(operatorIdController.text),
+              services: servicesIdArrayFromServices(),
+              start: start,
+              end: null);
           screenState.value = OrderState.started;
-          change(true, status: RxStatus.success());
         });
+
         break;
       case OrderState.started:
+        change(null, status: RxStatus.loading());
         _geolocationService.getPosition().then((value) {
-          var end = OrderLocation(
-            latitude: value.latitude,
-            longitude: value.longitude,
-            dateTime: DateTime.now(),
-          );
+          var end = orderLocationFromPosition(value);
 
-          _order!.end = end;
-          screenState.value = OrderState.finished;
+          _order.end = end;
+          _createOrder();
         });
+
         break;
-      case OrderState.finished:
-        Get.toNamed('/home');
-        break;
+      default:
     }
   }
 
-  void createOrder() {
-    change(true, status: RxStatus.loading());
-    _orderService.createOrder(_order!).then((value) {
-      if (value) {
-        Get.snackbar('Sucesso', 'Ordem de serviço criada com sucesso',
-            backgroundColor: Colors.green);
-      } else {
-        Get.snackbar("Erro", "Não foi possível criar a ordem de serviço",
-            backgroundColor: Colors.red);
+  void _createOrder() {
+    screenState.value = OrderState.finished;
+    _orderService.createOrder(_order).then((value) {
+      if (value.success) {
+        Get.snackbar("Sucesso", "Ordem de serviço criada com sucesso");
+        clearForm();
       }
-      clearForm();
-    }).onError((error, stackTrace) {
-      Get.snackbar("Erro", "Não foi possível criar a ordem de serviço",
-          backgroundColor: Colors.red);
-
-      clearForm();
+    }).catchError((error) {
+      Get.snackbar("Erro", error.toString());
     });
   }
 
   void clearForm() {
-    operatorIdController.text = "";
-    _order = null;
-    selectedAssists.clear();
     screenState.value = OrderState.creating;
-    change(true, status: RxStatus.success());
+    selectedAssists.clear();
+    operatorIdController.text = "";
+    change(null, status: RxStatus.success());
+  }
+
+  editAssists() {
+    if (screenState.value != OrderState.creating) {
+      return null;
+    }
+    Get.toNamed("/assists", arguments: selectedAssists);
   }
 }

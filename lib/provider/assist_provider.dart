@@ -1,13 +1,11 @@
-import 'package:abc_tech_app/provider/default_http_client.dart';
+import 'package:abc_tech_app/constants.dart';
 import 'package:get/get_connect.dart';
 
-abstract class AssistanceProviderInterface {
+abstract class AssistProviderInterface {
   Future<Response> getAssists();
 }
 
-class AssistanceProvider implements AssistanceProviderInterface {
-  final DefaultHttpClient _httpClient = DefaultHttpClient();
-
+class AssistProvider extends GetConnect implements AssistProviderInterface {
   @override
-  Future<Response> getAssists() => _httpClient.get('/assists');
+  Future<Response> getAssists() => get('${Constants.url}/assists');
 }
